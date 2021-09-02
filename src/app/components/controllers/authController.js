@@ -25,7 +25,7 @@ exports.signIn =  function (req, res) {
                         email: trySignInUser.email,
                         userId: trySignInUser.id
                     },key,{expiresIn: 3600}) ;
-                    res.status(200).json({ access_token: `Bearer ${token}`, user: trySignInUser })
+                    res.status(200).json({ access_token: `Bearer ${token}`, user: User.changeUserForFE(trySignInUser) })
                 } else {
                     res.status(401).json(new MyError('Password is wrong'))
                 }

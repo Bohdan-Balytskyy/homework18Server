@@ -41,3 +41,23 @@ exports.patch = function (req, res) {
     }
   }
 }
+exports.getHistory = function (req, res) {
+  try {
+    User.getHistory(req.params.id, function (err, record) {
+      res.status(200).json(record);
+    });
+  }
+  catch (err) {
+    res.json(new CommonError(err));
+  }
+}
+exports.getStatistic = function (req, res) {
+  try {
+    User.getStatistic(req.params.id, function (err, record) {
+      res.status(200).json(record);
+    });
+  }
+  catch (err) {
+    res.json(new CommonError(err));
+  }
+}
