@@ -8,6 +8,9 @@ class User {
         this.surname = user.surname;
         this.email = user.email;
         this.password = bcryptjs.hashSync(user.password, salt);
+        this.lastVisit =  user.date;
+        this.image = user.image;
+        this.link = ''; 
         this.finances = [
             {
                 date: user.date,
@@ -60,6 +63,26 @@ class User {
             }  
         }
     }
+    
+    static update(id, personalData, file, result) {           
+        for (const user of users) {
+            if (+id === user.id) {
+                let salt = bcryptjs.genSaltSync(10);
+                user.name = personalData.name;
+                user.surname = personalData.surname;
+                user.email = personalData.email;
+                if(personalData.password) user.password = bcryptjs.hashSync(personalData.password, salt);
+                if (file)  {
+                    user.image = file.path;
+                    user.link = personalData.link;
+                } else if (personalData.link) {
+                    user.image = '';
+                    user.link = personalData.link;
+                }
+                result(null, User.changeUserForFE(user))
+            }
+        }
+    }
     static getById(id, result) {
         for (const user of users) {
             if (+id === user.id) {
@@ -72,6 +95,7 @@ class User {
             if (trySignInUser.email === user.email) {
                 let d = new Date();
                 let lastUseDay = user.finances[user.finances.length - 1].date;
+                user.lastVisit = lastUseDay;           
                 if (d.setHours(0, 0, 0, 0) !== lastUseDay) {
                     let countAddDays = (d.setHours(0, 0, 0, 0) - lastUseDay) / 86400000;
                     for (let i = 1; i <= countAddDays; i++ ){
@@ -122,14 +146,14 @@ class User {
 let users = [];
 let today = new Date()
 
-users.push(new User({date: today.setHours(-24,0,0,0),
-    id:1, name: 'Petro', surname: 'Petrenko', email: 'petro@petro.gmail.com', password: 'petro',
+users.push(new User({date: today.setHours(-24,0,0,0), image: '',
+    id:1, name: 'Petro', surname: 'Petrenko', email: 'petro@petro.gmail.com', password: 'Petro$123',
     income: 2000, saves: [['',1000], ['',1000], ['saveNew', 1000]],
     spends: [['',500], ['',500], ['',500], ['',500], ['spendNew', 500]]
 }));
 
-users.push(new User ({date: today.setHours(-48,0,0,0),
-    id: 2, name: 'Ivan', surname: 'Ivanenko', email: 'ivan@ivan.gmail.com', password: 'ivan',
+users.push(new User ({date: today.setHours(-48,0,0,0), image: 'src\\app\\components\\uploads\\6.jpg',
+    id: 2, name: 'Ivan', surname: 'Ivanenko', email: 'ivan@ivan.gmail.com', password: 'Ivan$123',
     income: 1000,  saves: [['', 500], ['', 500]],
     spends: [['', 250], ['',250], ['',250], ['',250]]
 }));

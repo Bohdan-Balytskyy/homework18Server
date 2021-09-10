@@ -15,6 +15,7 @@ app.use((req, res, next) => {
 app.use(myPassport.initialize);       
 myPassport.passportUse();
             
+app.use('/uploads', express.static('src/app/components/uploads'));   //+
 app.use(express.json());
 
 app.get('/', (req, res) => {

@@ -61,3 +61,18 @@ exports.getStatistic = function (req, res) {
     res.json(new CommonError(err));
   }
 }
+
+exports.update = function (req, res) {
+  if (!req.body.name || !req.body.surname || !req.body.email) {
+    res.status(400).json(new MyError('Please provide all required field'));
+  } else {
+    try {
+      User.update(req.params.id, req.body, req.file, function (err, record) {
+        res.status(200).json(record);
+      });
+    }
+    catch (err) {
+      res.json(new CommonError(err));
+    }
+  }
+}
