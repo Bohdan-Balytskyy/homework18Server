@@ -10,7 +10,8 @@ class User {
         this.password = bcryptjs.hashSync(user.password, salt);
         this.lastVisit =  user.date;
         this.image = user.image;
-        this.link = ''; 
+        this.link = '';
+        this.history23task = [];
         this.finances = [
             {
                 date: user.date,
@@ -58,7 +59,8 @@ class User {
                 for (const spend of financesData.spends) {
                     finance.expenses += spend.sum;
                 }
-                finance.spends = financesData.spends
+                finance.spends = financesData.spends;
+                if (financesData.history23task) user.history23task.push(financesData.history23task);
                 result(null, User.changeUserForFE(user))
             }  
         }
@@ -123,7 +125,7 @@ class User {
     static getHistory(id, result) {
         for (const user of users) {
             if (+id === user.id) {
-                result(null, user.finances)
+                result(null, { history: user.finances, history23task: user.history23task})
             }
         }
     }
@@ -152,10 +154,41 @@ users.push(new User({date: today.setHours(-24,0,0,0), image: '',
     spends: [['',500], ['',500], ['',500], ['',500], ['spendNew', 500]]
 }));
 
-users.push(new User ({date: today.setHours(-48,0,0,0), image: 'src\\app\\components\\uploads\\6.jpg',
+users.push(new User ({date: today.setHours(-9200,0,0,0), image: 'src\\app\\components\\uploads\\6.jpg',
     id: 2, name: 'Ivan', surname: 'Ivanenko', email: 'ivan@ivan.gmail.com', password: 'Ivan$123',
-    income: 1000,  saves: [['', 500], ['', 500]],
-    spends: [['', 250], ['',250], ['',250], ['',250]]
+    income: 0,  saves: [['', 1000], ['', 1000]],
+    spends: [['', 400], ['',400], ['',0], ['',0]]
 }));
+users[1].history23task.push(
+{ date: +new Date(2020, 8, 10, 18, 30, 00), sum: 2800, year: 2020, month: 08, act: 'income', from: '', to: 'income' },
+{ date: +new Date(2020, 8, 10, 18 ,45, 00), sum: 1400, year: 2020, month: 08, act: 'save', from: 'income', to: 'CASH'},
+{ date: +new Date(2020, 8, 10, 19, 00, 00), sum: 1400, year: 2020, month: 08, act: 'save', from: 'income', to: 'BANK'},
+{date: +new Date(2020, 8, 25, 20, 00, 00), sum: 400, year: 2020, month: 08, act: 'spend', from: 'CASH', to: 'FOOD' },
+{date: +new Date(2020, 8, 25, 20, 05, 00), sum: 400, year: 2020, month: 08, act: 'spend', from: 'BANK', to: 'UTILITIES' },
+{ date: +new Date(2021, 7, 2, 15, 30, 00), sum: 1000, year: 2021, month: 07, act: 'income', from: '', to: 'income' },
+{ date: +new Date(2021, 7, 2, 15 ,45, 00), sum: 500, year: 2021, month: 07, act: 'save', from: 'income', to: 'CASH'},
+{ date: +new Date(2021, 7, 2, 16, 00, 00), sum: 500, year: 2021, month: 07, act: 'save', from: 'income', to: 'BANK'},
+{date: +new Date(2021, 7, 27, 16, 45, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'BANK', to: 'UTILITIES' },
+{date: +new Date(2021, 7, 27, 16, 50, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'BANK', to: 'STUDY' },
+{date: +new Date(2021, 7, 27, 16, 55, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'CASH', to: 'FOOD' },
+{date: +new Date(2021, 7, 27, 17, 00, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'CASH', to: 'TRANSPORT'}
+)
+users[1].finances.push({
+    date: +new Date(2021, 7, 2, 16, 00, 00), income: 1000, balance: 3000, expenses: 0,
+    saves: [{ name: "CASH", icon: "fa fa-money", sum: 1000, active: false },
+    { name: "BANK", icon: "fa fa-bank", sum: 1000, active: false }],
+    spends: [{ name: "FOOD", icon: "fa fa-coffee", sum: 0 },
+    { name: "UTILITIES", icon: "fa fa-home", sum: 0 },
+    { name: "TRANSPORT", icon: "fa fa-bus", sum: 0 },
+    { name: "STUDY", icon: "fa fa-graduation-cap", sum: 0 }]
+}, {
+    date: +new Date(2021, 7, 27, 17, 00, 00), income: 1000, balance: 2000, expenses: 1000,
+    saves: [{ name: "CASH", icon: "fa fa-money", sum: 500, active: false },
+    { name: "BANK", icon: "fa fa-bank", sum: 500, active: false }],
+    spends: [{ name: "FOOD", icon: "fa fa-coffee", sum: 250 },
+    { name: "UTILITIES", icon: "fa fa-home", sum: 250 },
+    { name: "TRANSPORT", icon: "fa fa-bus", sum: 250 },
+    { name: "STUDY", icon: "fa fa-graduation-cap", sum: 250 }]
+})
 
 module.exports = { users: users, user: User };
