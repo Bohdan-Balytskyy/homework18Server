@@ -102,8 +102,8 @@ class User {
                     let countAddDays = (d.setHours(0, 0, 0, 0) - lastUseDay) / 86400000;
                     for (let i = 1; i <= countAddDays; i++ ){
                         let nextDate = new Date(lastUseDay + 86400000 * i)
-                        user.finances.push(Object.assign({}, user.finances[user.finances.length - 1]));
-                        let newFinance = user.finances[user.finances.length - 1]
+                        user.finances.push(JSON.parse(JSON.stringify(user.finances[user.finances.length - 1])));
+                        let newFinance = user.finances[user.finances.length - 1];
                         newFinance.date = nextDate.setHours(0, 0, 0, 0);
                         if (nextDate.getDate() === 1) {
                             newFinance.expenses = 0;
@@ -171,9 +171,24 @@ users[1].history23task.push(
 {date: +new Date(2021, 7, 27, 16, 45, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'BANK', to: 'UTILITIES' },
 {date: +new Date(2021, 7, 27, 16, 50, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'BANK', to: 'STUDY' },
 {date: +new Date(2021, 7, 27, 16, 55, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'CASH', to: 'FOOD' },
-{date: +new Date(2021, 7, 27, 17, 00, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'CASH', to: 'TRANSPORT'}
+{date: +new Date(2021, 7, 27, 17, 00, 00), sum: 250, year: 2021, month: 07, act: 'spend', from: 'CASH', to: 'TRANSPORT'},
+{ date: +new Date(2021, 8, 2, 15, 30, 00), sum: 2500, year: 2021, month: 08, act: 'income', from: '', to: 'income' },
+{ date: +new Date(2021, 8, 2, 15 ,45, 00), sum: 600, year: 2021, month: 08, act: 'save', from: 'income', to: 'CASH'},
+{ date: +new Date(2021, 8, 2, 16, 00, 00), sum: 1400, year: 2021, month: 08, act: 'save', from: 'income', to: 'BANK'},
+{date: +new Date(2021, 8, 27, 16, 45, 00), sum: 400, year: 2021, month: 08, act: 'spend', from: 'BANK', to: 'UTILITIES' },
+{date: +new Date(2021, 8, 27, 16, 50, 00), sum: 800, year: 2021, month: 08, act: 'spend', from: 'BANK', to: 'STUDY' },
+{date: +new Date(2021, 8, 27, 16, 55, 00), sum: 200, year: 2021, month: 08, act: 'spend', from: 'CASH', to: 'FOOD' },
+{date: +new Date(2021, 8, 27, 17, 00, 00), sum: 100, year: 2021, month: 08, act: 'spend', from: 'CASH', to: 'TRANSPORT'}
 )
 users[1].finances.push({
+    date: +new Date(2021, 6, 2, 16, 00, 00), income: 1000, balance: 2000, expenses: 0,
+    saves: [{ name: "CASH", icon: "fa fa-money", sum: 1000, active: false },
+    { name: "BANK", icon: "fa fa-bank", sum: 1000, active: false }],
+    spends: [{ name: "FOOD", icon: "fa fa-coffee", sum: 0 },
+    { name: "UTILITIES", icon: "fa fa-home", sum: 0 },
+    { name: "TRANSPORT", icon: "fa fa-bus", sum: 0 },
+    { name: "STUDY", icon: "fa fa-graduation-cap", sum: 0 }]
+}, {
     date: +new Date(2021, 7, 2, 16, 00, 00), income: 1000, balance: 3000, expenses: 0,
     saves: [{ name: "CASH", icon: "fa fa-money", sum: 1000, active: false },
     { name: "BANK", icon: "fa fa-bank", sum: 1000, active: false }],
@@ -189,6 +204,13 @@ users[1].finances.push({
     { name: "UTILITIES", icon: "fa fa-home", sum: 250 },
     { name: "TRANSPORT", icon: "fa fa-bus", sum: 250 },
     { name: "STUDY", icon: "fa fa-graduation-cap", sum: 250 }]
+}, {
+    date: +new Date(2021, 8, 27, 17, 00, 00), income: 1500, balance: 3000, expenses: 1500,
+    saves: [{ name: "CASH", icon: "fa fa-money", sum: 800, active: false },
+    { name: "BANK", icon: "fa fa-bank", sum: 700, active: false }],
+    spends: [{ name: "FOOD", icon: "fa fa-coffee", sum: 200 },
+    { name: "UTILITIES", icon: "fa fa-home", sum: 400 },
+    { name: "TRANSPORT", icon: "fa fa-bus", sum: 100 },
+    { name: "STUDY", icon: "fa fa-graduation-cap", sum: 800 }]
 })
-
 module.exports = { users: users, user: User };
